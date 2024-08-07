@@ -1,12 +1,12 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
-import { AnchorVaultQ3 } from "../target/types/anchor_vault_q3";
+import { Vault } from "../target/types/vault";
 
-describe("anchor-vault-q3", () => {
+describe("Vault", () => {
 	const provider = anchor.AnchorProvider.env();
 	anchor.setProvider(provider);
 
-	const program = anchor.workspace.AnchorVaultQ3 as Program<AnchorVaultQ3>;
+	const program = anchor.workspace.Vault as Program<Vault>;
 
 	const user = new anchor.web3.Keypair();
 
@@ -32,17 +32,17 @@ describe("anchor-vault-q3", () => {
 
 	afterEach(async () => {
 		console.log(
-			"User balance",
+			"\tUser balance",
 			(await provider.connection.getBalance(user.publicKey)) /
 				LAMPORTS_PER_SOL
 		);
 		console.log(
-			"Vault balance",
+			"\tVault balance",
 			(await provider.connection.getBalance(vault)) / LAMPORTS_PER_SOL
 		);
 	});
 
-	it("Is initialized!", async () => {
+	it("Initializes the vault", async () => {
 		const tx = await program.methods
 			.initialize()
 			.accountsPartial({
@@ -53,10 +53,10 @@ describe("anchor-vault-q3", () => {
 			})
 			.signers([user])
 			.rpc();
-		console.log("\nYour transaction signature", tx);
+		console.log("\t\nYour transaction signature", tx);
 
 		const currentState = await program.account.vaultState.fetch(state);
-		console.log("State", currentState);
+		console.log("\tState", currentState);
 	});
 
 	it("Makes a deposit", async () => {
@@ -71,10 +71,10 @@ describe("anchor-vault-q3", () => {
 			})
 			.signers([user])
 			.rpc();
-		console.log("\nYour transaction signature", tx);
+		console.log("\t\nYour transaction signature", tx);
 
 		const currentState = await program.account.vaultState.fetch(state);
-		console.log("State", currentState);
+		console.log("\tState", currentState);
 	});
 
 	it("Makes a withdraw", async () => {
@@ -89,10 +89,10 @@ describe("anchor-vault-q3", () => {
 			})
 			.signers([user])
 			.rpc();
-		console.log("\nYour transaction signature", tx);
+		console.log("\t\nYour transaction signature", tx);
 
 		const currentState = await program.account.vaultState.fetch(state);
-		console.log("State", currentState);
+		console.log("\tState", currentState);
 	});
 
 	it("Closes the vault", async () => {
@@ -106,13 +106,13 @@ describe("anchor-vault-q3", () => {
 			})
 			.signers([user])
 			.rpc();
-		console.log("\nYour transaction signature", tx);
+		console.log("\t\nYour transaction signature", tx);
 
 		try {
 			const currentState = await program.account.vaultState.fetch(state);
-			console.log("State", currentState);
+			console.log("\tState", currentState);
 		} catch (error) {
-			console.log("State has been closed and does not exist anymore.");
+			console.log("\tState has been closed and does not exist anymore.");
 		}
 	});
 });

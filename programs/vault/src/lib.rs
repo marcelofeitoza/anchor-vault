@@ -11,7 +11,7 @@ mod errors;
 declare_id!("HqLgpRCGL41gvWf35M8uGGmKenq6WpAJSMVrT2pKpCeL");
 
 #[program]
-pub mod anchor_vault_q3 {
+pub mod vault {
     use super::*;
 
     pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
