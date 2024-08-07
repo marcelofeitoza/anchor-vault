@@ -14,13 +14,8 @@ declare_id!("HqLgpRCGL41gvWf35M8uGGmKenq6WpAJSMVrT2pKpCeL");
 pub mod vault {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        msg!("Greetings from: {:?}", ctx.program_id);
-        msg!(
-            "Size of VaultState: {}",
-            8 + std::mem::size_of::<VaultState>()
-        );
-        ctx.accounts.initialize(&ctx.bumps)
+    pub fn initialize(ctx: Context<Initialize>, lock_duration: Option<i64>) -> Result<()> {
+        ctx.accounts.initialize(&ctx.bumps, lock_duration)
     }
 
     pub fn deposit(ctx: Context<Payments>, amount: u64) -> Result<()> {

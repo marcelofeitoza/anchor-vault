@@ -8,4 +8,6 @@ pub enum VaultErrors {
     InsufficientUserFunds,
     #[msg("Insufficient vault funds")]
     InsufficientVaultFunds,
+    #[msg("Withdraw is locked")]
+    WithdrawLocked,
 }

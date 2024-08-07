@@ -22,9 +22,19 @@ pub struct Initialize<'info> {
 }
 
 impl<'info> Initialize<'info> {
-    pub fn initialize(&mut self, bumps: &InitializeBumps) -> Result<()> {
+    pub fn initialize(
+        &mut self,
+        bumps: &InitializeBumps,
+        lock_duration: Option<i64>,
+    ) -> Result<()> {
         self.state.vault_bump = bumps.vault;
         self.state.state_bump = bumps.state;
+
+        if let Some(lock_duration) = lock_duration {
+            self.state.lock_duration = Some(lock_duration);
+        }
+        self.state.last_withdrawal = None;
+
         Ok(())
     }
 }
