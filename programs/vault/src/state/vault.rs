@@ -5,7 +5,7 @@ pub struct VaultState {
     pub vault_bump: u8,
     pub state_bump: u8,
     pub lock_duration: Option<i64>,
-    pub last_withdrawal: Option<i64>,
+    pub last_withdraw: Option<i64>,
 }
 
 impl Space for VaultState {

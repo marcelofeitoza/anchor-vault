@@ -33,7 +33,7 @@ impl<'info> Initialize<'info> {
         if let Some(lock_duration) = lock_duration {
             self.state.lock_duration = Some(lock_duration);
         }
-        self.state.last_withdrawal = None;
+        self.state.last_withdraw = None;
 
         Ok(())
     }

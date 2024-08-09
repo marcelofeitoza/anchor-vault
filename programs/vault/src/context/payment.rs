@@ -30,6 +30,7 @@ impl<'info> Payments<'info> {
         };
         let transfer_ctx =
             CpiContext::new(self.system_program.to_account_info(), transfer_accounts);
+
         transfer(transfer_ctx, amount)
     }
 
@@ -37,15 +38,13 @@ impl<'info> Payments<'info> {
         let current_time = Clock::get()?.unix_timestamp;
 
         if let Some(lock_duration) = self.state.lock_duration {
-            if let Some(last_withdrawal) = self.state.last_withdrawal {
-                if current_time < last_withdrawal + lock_duration {
+            if let Some(last_withdraw) = self.state.last_withdraw {
+                if current_time < last_withdraw + lock_duration {
                     return Err(VaultErrors::WithdrawLocked.into());
                 }
             }
         }
-
-        msg!("Current time: {}", current_time);
-        msg!("Last withdrawal: {:?}", self.state.last_withdrawal);
+        self.state.last_withdraw = Some(current_time);
 
         let cpi_program = self.system_program.to_account_info();
 
@@ -64,8 +63,6 @@ impl<'info> Payments<'info> {
         let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
 
         transfer(cpi_ctx, amount)?;
-
-        self.state.last_withdrawal = Some(current_time);
 
         Ok(())
     }
